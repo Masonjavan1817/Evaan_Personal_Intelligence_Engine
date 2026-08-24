@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+*.pyc
+evaan_memory.json
+.env
+models/
