@@ -1,4 +1,4 @@
-## Code Description
+## Code Description 
 
 **Evaan** is a fully local, CPU-based **conversational AI companion chatbot** built with **Python**, **PyTorch**, and Hugging Face **Transformers**, running on the **Qwen2.5-0.5B-Instruct** model. Unlike API-dependent chatbots, Evaan runs entirely on the user's own machine after a one-time model download, requiring no internet connection, no API key, and no external service for day-to-day conversation.
 
